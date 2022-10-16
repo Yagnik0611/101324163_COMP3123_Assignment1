@@ -1,0 +1,13 @@
+{
+    
+    "username":"Tommy",
+    "email": "Tommy505@gmail.com",
+    "password":"tommy"
+    
+
+}
+{
+    "username": "Rohan patel",
+    "password":"rohan1106"
+    
+    }
