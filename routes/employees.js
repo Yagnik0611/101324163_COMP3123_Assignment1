@@ -2,6 +2,8 @@
 const express = require("express")
 const EmployeeModel= require("../models/Employees")
 const routes= express.Router()
+const jwt = require("jsonwebtoken")
+
 
 // function to handle validation error  genereated by the  errors written in shema  for the EMployee collection 
 
@@ -37,12 +39,12 @@ const handleErrors = (err) => {
 // get method for getting list of employees
 // http://localhost:3000/api/emp/employees
 
-routes.get("/employees", async(req,res)=>{
+routes.get("/employees",veryfyToken, async(req,res)=>{
 
     try{
         const employees = await EmployeeModel.find()
     
-         res.status(200).send(employees)
+         res.status(200).json(employees)
         
        }catch(error){
         res.status(500).send({message: "No employees found."})
@@ -135,8 +137,36 @@ routes.delete("/employees", async(req,res)=>{
        
      }
      catch(error){
-         res.status(500).send({message: "Can not find employee with given id."})
+         res.status().send({message: "Can not find employee with given id."})
      }
     
 })
 module.exports = routes
+function veryfyToken(req,res,next){
+  const bearerHeader= req.headers['authorization']
+
+ if( bearerHeader !== null){
+console.log(bearerHeader)
+  const bearer = bearerHeader.split(' ');
+  console.log(bearer)
+  const bearerToken = bearer[1]
+
+  jwt.verify(bearerToken,'secretkey',(err,userdata)=>{
+
+  if(err){
+          res.sendStatus(403);
+      }
+      else{
+          next()
+
+          
+      }
+  })
+  
+
+}
+else{
+  res.sendStatus(403)
+}
+
+}

@@ -3,18 +3,37 @@
 const express = require("express")
 const userRoutes = require("./routes/user")
 const employeesRoutes = require("./routes/employees")
-const mongoose =require("mongoose")
+const mongoose = require("mongoose")
 const app = express()
-const SERVER_PORT = 3000
+const path = require("path");
+const SERVER_PORT =  process.env.PORT || 3001
 
+const cors=require("cors");
+const corsOptions ={
+   origin:'*', 
+   credentials:true,            //access-control-allow-credentials:true
+   optionSuccessStatus:200,
+}
 
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded())
 
+app.use(express.static(path.join(__dirname, "./101324163_comp3123_assignment2_reactjs/build")));
 
+app.get("*", function (_, res) {
+  res.sendFile(
+    path.join(__dirname, "./101324163_comp3123_assignment2_reactjs/build/index.html"),
+    function (err) {
+      if (err) {
+        res.status(500).send(err);
+      }
+    }
+  );
+});
 
 // connecting to the MongoDB data base
- const DB_URL = "mongodb+srv://hi:Bj6reTyGa7RsYVFg@cluster0.olmzrvg.mongodb.net/comp3123_assigment1?retryWrites=true&w=majority"
+ const DB_URL = process.env.DB_URL || "mongodb+srv://hi:Bj6reTyGa7RsYVFg@cluster0.olmzrvg.mongodb.net/comp3123_assigment1?retryWrites=true&w=majority"
 
  
  mongoose.Promise = global.Promise;

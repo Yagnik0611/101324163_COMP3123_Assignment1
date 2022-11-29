@@ -78,6 +78,7 @@ routes.post("/login", async(req,res)=>{
      
      try{
             const userdata = await UserModel.findOne( {username: user.username})
+            if (!userdata) return  res.status(401).send({ status : false, message: "Invalid Username and password"})
 
             if(userdata ){
 
@@ -87,11 +88,15 @@ routes.post("/login", async(req,res)=>{
                 await  bcrypt.compare(password, userdata.password, (err, result)=> {
                     if (result) {
                          // if password matches this follwing code will create token for that user and send it to user
-                        jwt.sign({userdata},'secretkey',(err,token)=>{
+                        jwt.sign({userdata},'secretkey',{
+                            expiresIn: "1h",
+                          },
+                          (err,token)=>{
+                            
 
             
                             res.status(200).send({status : true, username: user.username ,message: "User logged in successfully", accessToken : token})
-                        })}
+                     })}
             else{
 
                     res.status(401).send({ status : false, message: "Invalid Username and password"})}
@@ -109,29 +114,34 @@ routes.post("/login", async(req,res)=>{
 ////http://localhost:3000/api/user/login
 routes.get("/login",  veryfyToken,async(req,res)=>{
 
-    jwt.verify(req.token,'secretkey',(err,userdata)=>{
-        if(err){
-            res.sendStatus(403);
-        }
-        else{
-            res.json({
-            userdata
-            })
-        }
-    })
-    res.send(" Users information ")
+    
+    //res.send(res.userdata)
    
 })
 
-function veryfyToken(req,res,next){
+ function veryfyToken(req,res,next){
     const bearerHeader= req.headers['authorization']
-if(typeof bearerHeader !== "undefined"){
-
-    const bearer = bearerHeader.split(' ')
+  
+   if( bearerHeader !== null){
+console.log(bearerHeader)
+    const bearer = bearerHeader.split(' ');
+    console.log(bearer)
     const bearerToken = bearer[1]
-    req.token = bearerToken
-    next()
+  
+    jwt.verify(bearerToken,'secretkey',(err,userdata)=>{
 
+    if(err){
+            res.sendStatus(403);
+        }
+        else{
+            res.send({
+            userdata
+            
+            })
+            
+        }
+    })
+    
 
 }
 else{
