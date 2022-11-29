@@ -120,10 +120,14 @@ routes.get("/login",  veryfyToken,async(req,res)=>{
 })
 
  function veryfyToken(req,res,next){
-    const bearerHeader= req.headers['authorization']
+
+    
   
-   if( bearerHeader !== null){
-console.log(bearerHeader)
+    
+   if( req.headers['authorization'] !== undefined){
+    
+    const   bearerHeader = req.headers['authorization']
+    console.log(bearerHeader)
     const bearer = bearerHeader.split(' ');
     console.log(bearer)
     const bearerToken = bearer[1]

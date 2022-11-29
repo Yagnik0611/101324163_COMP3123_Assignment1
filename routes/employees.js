@@ -141,32 +141,36 @@ routes.delete("/employees", async(req,res)=>{
      }
     
 })
-module.exports = routes
+
 function veryfyToken(req,res,next){
-  const bearerHeader= req.headers['authorization']
-
- if( bearerHeader !== null){
-console.log(bearerHeader)
-  const bearer = bearerHeader.split(' ');
-  console.log(bearer)
-  const bearerToken = bearer[1]
-
-  jwt.verify(bearerToken,'secretkey',(err,userdata)=>{
-
-  if(err){
-          res.sendStatus(403);
-      }
-      else{
-          next()
-
-          
-      }
-  })
+    
+  if(  req.headers['authorization'] !== undefined){
+    
+    const   bearerHeader = req.headers['authorization']
+    console.log(bearerHeader)
+    const bearer = bearerHeader.split(' ');
+    console.log(bearer)
+    const bearerToken = bearer[1]
   
+    jwt.verify(bearerToken,'secretkey',(err,userdata)=>{
+
+    if(err){
+            res.sendStatus(403);
+        }
+        else{
+            res.send({
+            userdata
+            
+            })
+            
+        }
+    })
+    
 
 }
 else{
-  res.sendStatus(403)
+    res.sendStatus(403)
 }
 
 }
+module.exports = routes

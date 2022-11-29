@@ -19,18 +19,18 @@ app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded())
 
-app.use(express.static(path.join(__dirname, "./101324163_comp3123_assignment2_reactjs/build")));
+// app.use(express.static(path.join(__dirname, "./101324163_comp3123_assignment2_reactjs/build")));
 
-app.get("*", function (_, res) {
-  res.sendFile(
-    path.join(__dirname, "./101324163_comp3123_assignment2_reactjs/build/index.html"),
-    function (err) {
-      if (err) {
-        res.status(500).send(err);
-      }
-    }
-  );
-});
+// app.get("*", function (_, res) {
+//   res.sendFile(
+//     path.join(__dirname, "./101324163_comp3123_assignment2_reactjs/build/index.html"),
+//     function (err) {
+//       if (err) {
+//         res.status(500).send(err);
+//       }
+//     }
+//   );
+// });
 
 // connecting to the MongoDB data base
  const DB_URL = process.env.DB_URL || "mongodb+srv://hi:Bj6reTyGa7RsYVFg@cluster0.olmzrvg.mongodb.net/comp3123_assigment1?retryWrites=true&w=majority"
