@@ -158,10 +158,9 @@ function veryfyToken(req,res,next){
             res.sendStatus(403);
         }
         else{
-            res.send({
-            userdata
+           next()
             
-            })
+        
             
         }
     })
